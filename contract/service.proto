@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+import public "model.proto";
+
+package letitfail;
+option go_package = "contract";
+
+message ListCommand {
+    int64 page = 1;
+}
+
+message Endpoints {
+    repeated Endpoint endpoints = 1;
+}
+
+service EndpointRegistry {
+    rpc list(ListCommand) returns (Endpoints);
+}
+
