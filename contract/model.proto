@@ -5,4 +5,5 @@ package letitfail;
 message Endpoint {
     string id = 1;
     string network_id = 2;
+    map<string, string> labels = 3;
 }

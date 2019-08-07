@@ -40,6 +40,7 @@ func (e *EndpointRegistry) List(ctx context.Context, cmd *contract.ListCommand) 
 
 func containerToEndpoint(container *types.Container) *contract.Endpoint {
 	return &contract.Endpoint{
-		Id: container.ID,
+		Id:     container.ID,
+		Labels: container.Labels,
 	}
 }
