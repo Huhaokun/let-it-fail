@@ -13,5 +13,10 @@ func (n *NodeRegistry) Get(id string) Node {
 }
 
 func (n *NodeRegistry) List() []Node {
+	var nodes []Node
+	for _, node := range n.nodes {
+		nodes = append(nodes, node)
+	}
 
+	return nodes
 }
