@@ -8,6 +8,8 @@ import (
 	fmt "fmt"
 	proto "github.com/golang/protobuf/proto"
 	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 	math "math"
 )
 
@@ -158,6 +160,14 @@ func (c *endpointRegistryClient) List(ctx context.Context, in *ListCommand, opts
 // EndpointRegistryServer is the server API for EndpointRegistry service.
 type EndpointRegistryServer interface {
 	List(context.Context, *ListCommand) (*Endpoints, error)
+}
+
+// UnimplementedEndpointRegistryServer can be embedded to have forward compatible implementations.
+type UnimplementedEndpointRegistryServer struct {
+}
+
+func (*UnimplementedEndpointRegistryServer) List(ctx context.Context, req *ListCommand) (*Endpoints, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
 }
 
 func RegisterEndpointRegistryServer(s *grpc.Server, srv EndpointRegistryServer) {

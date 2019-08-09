@@ -1,7 +1,75 @@
 package admin
 
+import (
+	. "github.com/Huhaokun/let-it-fail/log"
+	v12 "k8s.io/api/core/v1"
+	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/watch"
+	"k8s.io/client-go/kubernetes"
+	"log"
+)
+
 type NodeRegistry struct {
-	nodes map[string]Node
+	k8sClient *kubernetes.Clientset
+	nodes     map[string]Node
+}
+
+func NewNodeRegistry(k8sClient *kubernetes.Clientset) *NodeRegistry {
+
+	r := &NodeRegistry{
+		k8sClient: k8sClient,
+		nodes:     make(map[string]Node),
+	}
+
+	err := r.Init()
+	if err != nil {
+		log.Fatalf("fail to init node regisry")
+	}
+
+	return r
+}
+
+func (n *NodeRegistry) Init() error {
+	nodeList, err := n.k8sClient.CoreV1().Nodes().List(v1.ListOptions{})
+	if err != nil {
+		Log.Errorf("fail to list k8s node due to %v", err)
+		return err
+	}
+
+	for _, node := range nodeList.Items {
+		for _, addr := range node.Status.Addresses {
+			if addr.Type == v12.NodeExternalIP {
+				n.nodes[addr.Address] = NewNode(addr.Address, 7999)
+			}
+		}
+	}
+
+	wch, err := n.k8sClient.CoreV1().Nodes().Watch(v1.ListOptions{
+		Watch: true,
+	})
+	if err != nil {
+		Log.Errorf("fail to watch k8s node due to %v", err)
+		return err
+	}
+
+	// TODO stop the go-routine
+	go func() {
+		for {
+			event := <-wch.ResultChan()
+			n.HandleNodeEvent(&event)
+		}
+	}()
+
+	return nil
+}
+
+func (n *NodeRegistry) HandleNodeEvent(event *watch.Event) {
+	// TODO figure it out
+	if event.Type == watch.Added {
+		Log.Infof("add new node %v", event.Object)
+	} else if event.Type == watch.Deleted {
+		Log.Infof("delete node %v", event.Object)
+	}
 }
 
 func (n *NodeRegistry) Get(id string) Node {
