@@ -5,7 +5,6 @@ import (
 	"github.com/Huhaokun/let-it-fail/contract"
 	"github.com/gin-gonic/gin"
 	"github.com/golang/protobuf/jsonpb"
-	"google.golang.org/grpc"
 	"net/http"
 	"time"
 )
@@ -13,13 +12,14 @@ import (
 var timeout = 3 * time.Second
 
 type Controller struct {
-	NodeRegistry NodeRegistry
+	NodeRegistry *NodeRegistry
 	Marshaller   *jsonpb.Marshaler
 }
 
-func NewController(conn *grpc.ClientConn) *Controller {
+func NewController(registry *NodeRegistry) *Controller {
 	return &Controller{
-		Marshaller: &jsonpb.Marshaler{},
+		NodeRegistry: registry,
+		Marshaller:   &jsonpb.Marshaler{},
 	}
 }
 

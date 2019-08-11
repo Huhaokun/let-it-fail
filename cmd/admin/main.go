@@ -4,19 +4,19 @@ import (
 	"github.com/Huhaokun/let-it-fail/admin"
 	. "github.com/Huhaokun/let-it-fail/log"
 	"github.com/gin-gonic/gin"
-	"google.golang.org/grpc"
+	"k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/rest"
 )
 
 
 func main() {
 	engine := gin.Default()
 
-	cc, err := grpc.Dial("127.0.0.1:7999", grpc.WithInsecure())
-	if err != nil {
-		Log.Fatalf("dial error %v", err)
-	}
+	k8sClient, err := kubernetes.NewForConfig(&rest.Config{})
 
-	controller := admin.NewController(cc)
+	registry := admin.NewNodeRegistry(k8sClient)
+
+	controller := admin.NewController(registry)
 
 	engine.GET("/api/endpoint", controller.HandleList)
 

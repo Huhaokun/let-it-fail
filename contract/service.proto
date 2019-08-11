@@ -14,6 +14,27 @@ message Endpoints {
 }
 
 service EndpointRegistry {
-    rpc list(ListCommand) returns (Endpoints);
+    rpc list (ListCommand) returns (Endpoints);
 }
 
+message OpResult {
+    bool success = 1;
+    string message = 2;
+}
+
+message EndpointFilter{
+   string id = 1;
+}
+
+service StatusKiller {
+    rpc kill(EndpointFilter) returns (OpResult);
+    rpc pause(EndpointFilter) returns (OpResult);
+}
+
+service NetworkDisruptor {
+
+}
+
+service ResourceChoker {
+
+}
