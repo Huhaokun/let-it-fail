@@ -13,3 +13,7 @@ function listEndpoints() {
         })
 
 }
+
+function killEndpoint(id: string) {
+    axios.post("/api/endpoint/kill")
+}

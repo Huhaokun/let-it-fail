@@ -1,18 +1,35 @@
 package main
 
 import (
+	"flag"
 	"github.com/Huhaokun/let-it-fail/admin"
 	. "github.com/Huhaokun/let-it-fail/log"
 	"github.com/gin-gonic/gin"
 	"k8s.io/client-go/kubernetes"
-	"k8s.io/client-go/rest"
+	"k8s.io/client-go/tools/clientcmd"
+	"os"
+	"path/filepath"
 )
 
 
 func main() {
 	engine := gin.Default()
 
-	k8sClient, err := kubernetes.NewForConfig(&rest.Config{})
+	var kubeConfig *string
+	if home := homeDir(); home != "" {
+		kubeConfig = flag.String("kubeConfig", filepath.Join(home, ".kube", "config"), "(optional) absolute path to the kubeConfig file")
+	} else {
+		kubeConfig = flag.String("kubeConfig", "", "absolute path to the kubeConfig file")
+	}
+	flag.Parse()
+
+	// use the current context in kubeConfig
+	config, err := clientcmd.BuildConfigFromFlags("", *kubeConfig)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	k8sClient, err := kubernetes.NewForConfig(config)
 
 	registry := admin.NewNodeRegistry(k8sClient)
 
@@ -26,4 +43,11 @@ func main() {
 	if err != nil {
 		Log.Fatalf("run http server failed %v", err)
 	}
+}
+
+func homeDir() string {
+	if h := os.Getenv("HOME"); h != "" {
+		return h
+	}
+	return os.Getenv("USERPROFILE") // windows
 }

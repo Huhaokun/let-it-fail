@@ -8,6 +8,9 @@ import (
 	"github.com/docker/docker/client"
 	"google.golang.org/grpc"
 	"net"
+	"os"
+	"os/signal"
+	"syscall"
 )
 
 var port = 7999
@@ -31,8 +34,16 @@ func main() {
 	contract.RegisterEndpointRegistryServer(grpcServer, agent.NewEndpointRegistry(dockerCli))
 	contract.RegisterStatusKillerServer(grpcServer, agent.NewStatusKiller(dockerCli))
 
+	c := make(chan os.Signal)
+	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+	go func() {
+		<- c
+		os.Exit(1)
+	}()
+
 	err = grpcServer.Serve(lis)
 	if err != nil {
 		Log.Errorf("fail to serve %v", err)
 	}
+
 }
