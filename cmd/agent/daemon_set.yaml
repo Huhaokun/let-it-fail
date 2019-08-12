@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: let-it-fail-agent
+  namespace: let-it-fail
+
+spec:
+  template:
+    metadata:
+      labels:
+        app: let-it-fail-agent
+    spec:
+      containers:
+        - name: lif-agent
+          image: docker.io/geekun94/lif-agent:latest
+          imagePullPolicy: IfNotPresent
+
+          resource:
+            cpu: "1"
+          ports:
+            - containerPort: 7999
+              hostPort: 7999
+              name: grpc
+              protocol: TCP
