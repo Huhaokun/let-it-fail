@@ -9,3 +9,13 @@ message Endpoint {
     repeated int32 ports = 4;
     map<string, string> labels = 5;
 }
+
+message Endpoints {
+    repeated Endpoint endpoints = 1;
+}
+
+message EndpointFilter {
+    string id = 1;
+    string host = 2;
+}
+

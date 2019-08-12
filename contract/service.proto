@@ -9,26 +9,18 @@ message ListCommand {
     int64 page = 1;
 }
 
-message Endpoints {
-    repeated Endpoint endpoints = 1;
-}
-
 service EndpointRegistry {
-    rpc list (ListCommand) returns (Endpoints);
+    rpc List (ListCommand) returns (Endpoints);
 }
 
 message OpResult {
-    bool success = 1;
-    string message = 2;
 }
 
-message EndpointFilter{
-   string id = 1;
-}
 
 service StatusKiller {
-    rpc kill(EndpointFilter) returns (OpResult);
-    rpc pause(EndpointFilter) returns (OpResult);
+    rpc Stop (EndpointFilter) returns (OpResult);
+    rpc Kill (EndpointFilter) returns (OpResult);
+    rpc Pause (EndpointFilter) returns (OpResult);
 }
 
 service NetworkDisruptor {

@@ -2,7 +2,9 @@ package admin
 
 import (
 	"context"
+	"errors"
 	"github.com/Huhaokun/let-it-fail/contract"
+	. "github.com/Huhaokun/let-it-fail/log"
 	"github.com/gin-gonic/gin"
 	"github.com/golang/protobuf/jsonpb"
 	"net/http"
@@ -40,9 +42,43 @@ func (ctrl *Controller) HandleList(c *gin.Context) {
 	}
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{})
-	} else if jsonStr, err := ctrl.Marshaller.MarshalToString(&contract.Endpoints{Endpoints: allEndpoints}); err != nil {
+	} else {
+		c.JSON(http.StatusOK, &contract.Endpoints{Endpoints: allEndpoints})
+	}
+}
+
+func (ctrl *Controller) HandleStatusOperation(c *gin.Context) {
+	// parse request param
+	operation := c.Param("op")
+	endpointFilter := &contract.EndpointFilter{}
+	err := c.BindJSON(endpointFilter)
+	if err != nil {
+		Log.Errorf("bind json error %v", err)
+		return
+	}
+
+	node := ctrl.NodeRegistry.Get(endpointFilter.Host)
+	ctx, _ := context.WithTimeout(context.Background(), timeout)
+	opResult := &contract.OpResult{}
+	if node != nil {
+		switch operation {
+		case "stop":
+			opResult, err = node.Stop(ctx, endpointFilter)
+		case "kill":
+			opResult, err = node.Kill(ctx, endpointFilter)
+		case "pause":
+			opResult, err = node.Pause(ctx, endpointFilter)
+		default:
+			err = errors.New("not support operation type")
+			_ = c.AbortWithError(http.StatusNotFound, err)
+			return
+		}
+	}
+
+	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{})
 	} else {
-		c.Data(http.StatusOK, "application/json", []byte(jsonStr))
+		c.JSON(http.StatusOK, opResult)
 	}
+
 }

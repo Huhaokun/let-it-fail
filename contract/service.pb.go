@@ -8,8 +8,6 @@ import (
 	fmt "fmt"
 	proto "github.com/golang/protobuf/proto"
 	grpc "google.golang.org/grpc"
-	codes "google.golang.org/grpc/codes"
-	status "google.golang.org/grpc/status"
 	math "math"
 )
 
@@ -63,66 +61,62 @@ func (m *ListCommand) GetPage() int64 {
 	return 0
 }
 
-type Endpoints struct {
-	Endpoints            []*Endpoint `protobuf:"bytes,1,rep,name=endpoints,proto3" json:"endpoints,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
-	XXX_unrecognized     []byte      `json:"-"`
-	XXX_sizecache        int32       `json:"-"`
+type OpResult struct {
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *Endpoints) Reset()         { *m = Endpoints{} }
-func (m *Endpoints) String() string { return proto.CompactTextString(m) }
-func (*Endpoints) ProtoMessage()    {}
-func (*Endpoints) Descriptor() ([]byte, []int) {
+func (m *OpResult) Reset()         { *m = OpResult{} }
+func (m *OpResult) String() string { return proto.CompactTextString(m) }
+func (*OpResult) ProtoMessage()    {}
+func (*OpResult) Descriptor() ([]byte, []int) {
 	return fileDescriptor_a0b84a42fa06f626, []int{1}
 }
 
-func (m *Endpoints) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_Endpoints.Unmarshal(m, b)
+func (m *OpResult) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_OpResult.Unmarshal(m, b)
 }
-func (m *Endpoints) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_Endpoints.Marshal(b, m, deterministic)
+func (m *OpResult) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_OpResult.Marshal(b, m, deterministic)
 }
-func (m *Endpoints) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Endpoints.Merge(m, src)
+func (m *OpResult) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_OpResult.Merge(m, src)
 }
-func (m *Endpoints) XXX_Size() int {
-	return xxx_messageInfo_Endpoints.Size(m)
+func (m *OpResult) XXX_Size() int {
+	return xxx_messageInfo_OpResult.Size(m)
 }
-func (m *Endpoints) XXX_DiscardUnknown() {
-	xxx_messageInfo_Endpoints.DiscardUnknown(m)
+func (m *OpResult) XXX_DiscardUnknown() {
+	xxx_messageInfo_OpResult.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_Endpoints proto.InternalMessageInfo
-
-func (m *Endpoints) GetEndpoints() []*Endpoint {
-	if m != nil {
-		return m.Endpoints
-	}
-	return nil
-}
+var xxx_messageInfo_OpResult proto.InternalMessageInfo
 
 func init() {
 	proto.RegisterType((*ListCommand)(nil), "letitfail.ListCommand")
-	proto.RegisterType((*Endpoints)(nil), "letitfail.Endpoints")
+	proto.RegisterType((*OpResult)(nil), "letitfail.OpResult")
 }
 
 func init() { proto.RegisterFile("service.proto", fileDescriptor_a0b84a42fa06f626) }
 
 var fileDescriptor_a0b84a42fa06f626 = []byte{
-	// 180 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0x2d, 0x4e, 0x2d, 0x2a,
-	0xcb, 0x4c, 0x4e, 0xd5, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0xe2, 0xcc, 0x49, 0x2d, 0xc9, 0x2c,
-	0x49, 0x4b, 0xcc, 0xcc, 0x91, 0xe2, 0xce, 0xcd, 0x4f, 0x49, 0xcd, 0x81, 0x88, 0x2b, 0x29, 0x72,
-	0x71, 0xfb, 0x64, 0x16, 0x97, 0x38, 0xe7, 0xe7, 0xe6, 0x26, 0xe6, 0xa5, 0x08, 0x09, 0x71, 0xb1,
-	0x14, 0x24, 0xa6, 0xa7, 0x4a, 0x30, 0x2a, 0x30, 0x6a, 0x30, 0x07, 0x81, 0xd9, 0x4a, 0x76, 0x5c,
-	0x9c, 0xae, 0x79, 0x29, 0x05, 0xf9, 0x99, 0x79, 0x25, 0xc5, 0x42, 0x86, 0x5c, 0x9c, 0xa9, 0x30,
-	0x8e, 0x04, 0xa3, 0x02, 0xb3, 0x06, 0xb7, 0x91, 0xb0, 0x1e, 0xdc, 0x6c, 0x3d, 0x98, 0xc2, 0x20,
-	0x84, 0x2a, 0x23, 0x0f, 0x2e, 0x01, 0xb8, 0x70, 0x6a, 0x7a, 0x66, 0x71, 0x49, 0x51, 0xa5, 0x90,
-	0x09, 0x17, 0x4b, 0x4e, 0x66, 0x71, 0x89, 0x90, 0x18, 0x92, 0x5e, 0x24, 0x77, 0x48, 0x89, 0x60,
-	0x31, 0xb3, 0xd8, 0x89, 0x2b, 0x8a, 0x23, 0x39, 0x3f, 0xaf, 0xa4, 0x28, 0x31, 0xb9, 0x24, 0x80,
-	0x21, 0x89, 0x0d, 0xec, 0x03, 0x63, 0x40, 0x00, 0x00, 0x00, 0xff, 0xff, 0xe1, 0xd1, 0xe9, 0x1c,
-	0xea, 0x00, 0x00, 0x00,
+	// 248 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x90, 0x41, 0x4b, 0xc3, 0x50,
+	0x0c, 0xc7, 0x2d, 0x56, 0x99, 0x99, 0x4a, 0x79, 0x8a, 0x68, 0x4f, 0xba, 0x93, 0xa7, 0x1e, 0xaa,
+	0xe8, 0xdd, 0xa9, 0x08, 0x8a, 0x8e, 0xee, 0xe6, 0xed, 0xd9, 0xc6, 0xf9, 0xd8, 0x6b, 0xf3, 0x48,
+	0x52, 0xc5, 0x4f, 0xe6, 0xd7, 0x93, 0x4e, 0x26, 0x3d, 0xec, 0xb2, 0x5b, 0xf8, 0x27, 0xbf, 0x5f,
+	0x42, 0x60, 0x4f, 0x90, 0x3f, 0x5d, 0x89, 0x59, 0x60, 0x52, 0x32, 0x3b, 0x1e, 0xd5, 0xe9, 0xbb,
+	0x75, 0x3e, 0x1d, 0xd6, 0x54, 0xa1, 0xff, 0xcb, 0x47, 0x67, 0x30, 0x7c, 0x72, 0xa2, 0x63, 0xaa,
+	0x6b, 0xdb, 0x54, 0xc6, 0x40, 0x1c, 0xec, 0x0c, 0x8f, 0xa3, 0xd3, 0xe8, 0x7c, 0xb3, 0x58, 0xd4,
+	0x23, 0x80, 0xc1, 0x4b, 0x28, 0x50, 0x5a, 0xaf, 0xf9, 0x03, 0x24, 0x77, 0x4d, 0x15, 0xc8, 0x35,
+	0x5a, 0xe0, 0xcc, 0x89, 0xf2, 0xb7, 0xb9, 0x84, 0xb8, 0x53, 0x98, 0xa3, 0xec, 0x7f, 0x47, 0xd6,
+	0x73, 0xa6, 0x87, 0xbd, 0x7c, 0x09, 0x4b, 0xfe, 0x13, 0xc1, 0xee, 0x54, 0xad, 0xb6, 0xf2, 0xe8,
+	0xbc, 0x47, 0x36, 0x57, 0x10, 0x4f, 0x95, 0x82, 0x39, 0x59, 0x31, 0x7e, 0xef, 0xbc, 0x22, 0xa7,
+	0x07, 0xbd, 0xd6, 0xf2, 0xa4, 0x8e, 0xeb, 0x0c, 0x6b, 0x73, 0xd7, 0xb0, 0x35, 0xb1, 0xad, 0xe0,
+	0xba, 0x60, 0x6e, 0x20, 0x79, 0x46, 0xfd, 0x22, 0x9e, 0xdf, 0x3a, 0xe1, 0x36, 0x28, 0x71, 0x9e,
+	0xc0, 0x7e, 0x81, 0x42, 0x2d, 0x97, 0x38, 0xfe, 0xa0, 0x39, 0xf2, 0x0d, 0xbc, 0x0e, 0x4a, 0x6a,
+	0x94, 0x6d, 0xa9, 0x93, 0x8d, 0xb7, 0xed, 0xc5, 0xb7, 0x2f, 0x7e, 0x03, 0x00, 0x00, 0xff, 0xff,
+	0x12, 0x56, 0x7e, 0xe4, 0x96, 0x01, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -150,7 +144,7 @@ func NewEndpointRegistryClient(cc *grpc.ClientConn) EndpointRegistryClient {
 
 func (c *endpointRegistryClient) List(ctx context.Context, in *ListCommand, opts ...grpc.CallOption) (*Endpoints, error) {
 	out := new(Endpoints)
-	err := c.cc.Invoke(ctx, "/letitfail.EndpointRegistry/list", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/letitfail.EndpointRegistry/List", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -160,14 +154,6 @@ func (c *endpointRegistryClient) List(ctx context.Context, in *ListCommand, opts
 // EndpointRegistryServer is the server API for EndpointRegistry service.
 type EndpointRegistryServer interface {
 	List(context.Context, *ListCommand) (*Endpoints, error)
-}
-
-// UnimplementedEndpointRegistryServer can be embedded to have forward compatible implementations.
-type UnimplementedEndpointRegistryServer struct {
-}
-
-func (*UnimplementedEndpointRegistryServer) List(ctx context.Context, req *ListCommand) (*Endpoints, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
 }
 
 func RegisterEndpointRegistryServer(s *grpc.Server, srv EndpointRegistryServer) {
@@ -197,10 +183,200 @@ var _EndpointRegistry_serviceDesc = grpc.ServiceDesc{
 	HandlerType: (*EndpointRegistryServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "list",
+			MethodName: "List",
 			Handler:    _EndpointRegistry_List_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "service.proto",
+}
+
+// StatusKillerClient is the client API for StatusKiller service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+type StatusKillerClient interface {
+	Stop(ctx context.Context, in *EndpointFilter, opts ...grpc.CallOption) (*OpResult, error)
+	Kill(ctx context.Context, in *EndpointFilter, opts ...grpc.CallOption) (*OpResult, error)
+	Pause(ctx context.Context, in *EndpointFilter, opts ...grpc.CallOption) (*OpResult, error)
+}
+
+type statusKillerClient struct {
+	cc *grpc.ClientConn
+}
+
+func NewStatusKillerClient(cc *grpc.ClientConn) StatusKillerClient {
+	return &statusKillerClient{cc}
+}
+
+func (c *statusKillerClient) Stop(ctx context.Context, in *EndpointFilter, opts ...grpc.CallOption) (*OpResult, error) {
+	out := new(OpResult)
+	err := c.cc.Invoke(ctx, "/letitfail.StatusKiller/Stop", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *statusKillerClient) Kill(ctx context.Context, in *EndpointFilter, opts ...grpc.CallOption) (*OpResult, error) {
+	out := new(OpResult)
+	err := c.cc.Invoke(ctx, "/letitfail.StatusKiller/Kill", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *statusKillerClient) Pause(ctx context.Context, in *EndpointFilter, opts ...grpc.CallOption) (*OpResult, error) {
+	out := new(OpResult)
+	err := c.cc.Invoke(ctx, "/letitfail.StatusKiller/Pause", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// StatusKillerServer is the server API for StatusKiller service.
+type StatusKillerServer interface {
+	Stop(context.Context, *EndpointFilter) (*OpResult, error)
+	Kill(context.Context, *EndpointFilter) (*OpResult, error)
+	Pause(context.Context, *EndpointFilter) (*OpResult, error)
+}
+
+func RegisterStatusKillerServer(s *grpc.Server, srv StatusKillerServer) {
+	s.RegisterService(&_StatusKiller_serviceDesc, srv)
+}
+
+func _StatusKiller_Stop_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EndpointFilter)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StatusKillerServer).Stop(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/letitfail.StatusKiller/Stop",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StatusKillerServer).Stop(ctx, req.(*EndpointFilter))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _StatusKiller_Kill_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EndpointFilter)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StatusKillerServer).Kill(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/letitfail.StatusKiller/Kill",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StatusKillerServer).Kill(ctx, req.(*EndpointFilter))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _StatusKiller_Pause_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EndpointFilter)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StatusKillerServer).Pause(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/letitfail.StatusKiller/Pause",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StatusKillerServer).Pause(ctx, req.(*EndpointFilter))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+var _StatusKiller_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "letitfail.StatusKiller",
+	HandlerType: (*StatusKillerServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Stop",
+			Handler:    _StatusKiller_Stop_Handler,
+		},
+		{
+			MethodName: "Kill",
+			Handler:    _StatusKiller_Kill_Handler,
+		},
+		{
+			MethodName: "Pause",
+			Handler:    _StatusKiller_Pause_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "service.proto",
+}
+
+// NetworkDisruptorClient is the client API for NetworkDisruptor service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+type NetworkDisruptorClient interface {
+}
+
+type networkDisruptorClient struct {
+	cc *grpc.ClientConn
+}
+
+func NewNetworkDisruptorClient(cc *grpc.ClientConn) NetworkDisruptorClient {
+	return &networkDisruptorClient{cc}
+}
+
+// NetworkDisruptorServer is the server API for NetworkDisruptor service.
+type NetworkDisruptorServer interface {
+}
+
+func RegisterNetworkDisruptorServer(s *grpc.Server, srv NetworkDisruptorServer) {
+	s.RegisterService(&_NetworkDisruptor_serviceDesc, srv)
+}
+
+var _NetworkDisruptor_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "letitfail.NetworkDisruptor",
+	HandlerType: (*NetworkDisruptorServer)(nil),
+	Methods:     []grpc.MethodDesc{},
+	Streams:     []grpc.StreamDesc{},
+	Metadata:    "service.proto",
+}
+
+// ResourceChokerClient is the client API for ResourceChoker service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+type ResourceChokerClient interface {
+}
+
+type resourceChokerClient struct {
+	cc *grpc.ClientConn
+}
+
+func NewResourceChokerClient(cc *grpc.ClientConn) ResourceChokerClient {
+	return &resourceChokerClient{cc}
+}
+
+// ResourceChokerServer is the server API for ResourceChoker service.
+type ResourceChokerServer interface {
+}
+
+func RegisterResourceChokerServer(s *grpc.Server, srv ResourceChokerServer) {
+	s.RegisterService(&_ResourceChoker_serviceDesc, srv)
+}
+
+var _ResourceChoker_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "letitfail.ResourceChoker",
+	HandlerType: (*ResourceChokerServer)(nil),
+	Methods:     []grpc.MethodDesc{},
+	Streams:     []grpc.StreamDesc{},
+	Metadata:    "service.proto",
 }

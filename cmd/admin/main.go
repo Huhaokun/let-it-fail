@@ -20,6 +20,8 @@ func main() {
 
 	engine.GET("/api/endpoint", controller.HandleList)
 
+	engine.POST("/api/endpoint/status_operation/:op", controller.HandleStatusOperation)
+
 	err = engine.Run("0.0.0.0:7998")
 	if err != nil {
 		Log.Fatalf("run http server failed %v", err)
