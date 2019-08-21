@@ -5,6 +5,9 @@ metadata:
   namespace: let-it-fail
 
 spec:
+  selector:
+    matchLabels:
+      app: let-it-fail-agent
   template:
     metadata:
       labels:
@@ -15,8 +18,6 @@ spec:
           image: docker.io/geekun94/lif-agent:latest
           imagePullPolicy: IfNotPresent
 
-          resource:
-            cpu: "1"
           ports:
             - containerPort: 7999
               hostPort: 7999

@@ -8,9 +8,10 @@ import (
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
 	"os"
+	"os/signal"
 	"path/filepath"
+	"syscall"
 )
-
 
 func main() {
 	engine := gin.Default()
@@ -38,6 +39,13 @@ func main() {
 	engine.GET("/api/endpoint", controller.HandleList)
 
 	engine.POST("/api/endpoint/status_operation/:op", controller.HandleStatusOperation)
+
+	c := make(chan os.Signal)
+	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+	go func() {
+		<-c
+		os.Exit(1)
+	}()
 
 	err = engine.Run("0.0.0.0:7998")
 	if err != nil {
